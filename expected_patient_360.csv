@@ -1,0 +1,9 @@
+patient_id,patient_name,encounter_count,trauma_record_count,burn_record_count,claim_count,allergy_count
+1001,James Carter,3,2,2,3,2
+1002,Maria Lopez,1,,,1,
+1003,David Brown,2,1,,2,1
+1004,Angela Wilson,1,,,1,
+1005,Robert Davis,1,2,2,1,2
+1006,Susan Taylor,1,,1,,
+1007,Michael Green,,,,,
+1008,Denise Hall,,,,,1
