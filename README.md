@@ -1,73 +1,49 @@
-[README.md](https://github.com/user-attachments/files/31200426/README.md)
 # Healthcare Patient 360 SQL Demo
 
-A PostgreSQL portfolio project that demonstrates how to turn multiple one-to-many healthcare data sources into a **single consolidated row per patient**.
+A PostgreSQL portfolio project showing how to combine information from multiple healthcare source systems into **one consolidated row per patient**.
+
+![Patient 360 consolidation flow](docs/patient-360-consolidation.svg)
 
 ## The problem
 
-Healthcare data is often spread across multiple tables such as:
+Healthcare information is often split across separate systems and tables:
 
-- patients
+- patient demographics
 - encounters
-- trauma registry records
-- burn registry records
+- trauma registry
+- burn registry
 - claims
 - allergies
 
-The same patient can appear multiple times in several of these tables.
+The same patient ID can appear multiple times in several source tables because one patient can have many encounters, claims, registry records, or allergies.
 
-If the tables are joined directly, the result can create duplicate or multiplied rows for the same patient.
+The goal is not simply to join the tables. The goal is to bring all relevant information together while preserving the intended output grain:
 
-### Example
+> **1 row = 1 patient**
 
-A patient may have:
+If a patient has data in a source, that information is carried into the row. If a patient has no matching record in a source, the related output columns remain `NULL`.
 
-- 3 encounters
-- 2 burn records
-- 3 claims
-- 2 allergies
+## Solution approach
 
-A direct join can produce many combinations of those records instead of one clean patient row.
-
-## Goal
-
-Create a reusable dataset where:
-
-- each patient appears exactly once
-- information from multiple source tables is preserved
-- multiple source records are summarized into columns
-- missing source data remains `NULL`
-- counts, dates, totals, and descriptive values remain accurate
-
-## Approach
-
-The solution uses a two-step pattern.
-
-### Step 1: Aggregate each one-to-many table
-
-Each child table is summarized to the target grain:
-
-**1 row per patient**
+Each one-to-many source table is first summarized to the patient level, then the summaries are joined back to the patient table.
 
 Examples:
 
-- encounters -> encounter count, first date, latest date, facilities, visit types
-- trauma -> record count, injury types, trauma levels
-- burns -> record count, burn types, severity
-- claims -> claim count, billed total, paid total, statuses
-- allergies -> allergy count and allergy list
+- encounters → count, first date, latest date, facilities, encounter types
+- trauma registry → record count, injury types, severity score, trauma level
+- burn registry → record count, burn types, burn percentage, severity
+- claims → claim count, billed total, paid total, outstanding amount, statuses
+- allergies → allergy count and allergy list
 
-### Step 2: Join the summaries back to patients
+Then PostgreSQL `LEFT JOIN`s each patient-level summary back to `patients`.
 
-Each aggregated dataset is `LEFT JOIN`ed back to the patient table.
+This produces a wide Patient 360 dataset where all available information is visible on one row.
 
-This preserves every patient and produces `NULL` when a patient has no matching record in a source table.
+## Why aggregation happens before the final join
 
-## Why this works
+Raw child tables can each contain multiple rows for the same patient. Joining every raw table together first can create many row combinations.
 
-The key idea is to control the **grain** before joining.
-
-Instead of joining several raw one-to-many datasets together, each source is first reduced to one row per patient.
+Instead, this project controls the grain before the final join:
 
 ```text
 encounters       many rows -> 1 patient summary
@@ -83,6 +59,29 @@ allergies        many rows -> 1 patient summary
                     1 row per patient
 ```
 
+## Dashboard / reporting layer
+
+![Healthcare Patient 360 dashboard preview](dashboard/patient-360-dashboard-preview.svg)
+
+The SQL output can feed analytics and reporting without rebuilding the source logic in the visualization layer.
+
+The included dashboard-ready CSV supports:
+
+- Total Patients
+- Total Encounters
+- Trauma Patients
+- Burn Patients
+- Total Claims
+- Total Billed
+- Total Paid
+- Outstanding Amount
+- Encounters by Facility
+- Claims by Status
+- registry coverage
+- patient-level detail
+
+See [`dashboard/patient_360_dashboard.csv`](dashboard/patient_360_dashboard.csv).
+
 ## SQL techniques demonstrated
 
 - PostgreSQL
@@ -90,20 +89,19 @@ allergies        many rows -> 1 patient summary
 - `LEFT JOIN`
 - `GROUP BY`
 - `COUNT`
-- `MIN`
-- `MAX`
+- `MIN` / `MAX`
 - `SUM`
 - `STRING_AGG`
 - `DISTINCT`
 - primary and foreign keys
 - indexes
-- validation queries
 - reusable database views
+- validation queries
 
 ## Project structure
 
 ```text
-healthcare-patient-360-sql-demo/
+healthcare-patient-360-sql-dem/
 ├── README.md
 ├── sql/
 │   ├── 01_schema.sql
@@ -113,7 +111,14 @@ healthcare-patient-360-sql-demo/
 │   ├── 05_validation_queries.sql
 │   └── 06_patient_360_view.sql
 ├── docs/
-│   └── architecture.md
+│   ├── architecture.md
+│   ├── before-after.md
+│   ├── data-model.md
+│   └── patient-360-consolidation.svg
+├── dashboard/
+│   ├── README.md
+│   ├── patient_360_dashboard.csv
+│   └── patient-360-dashboard-preview.svg
 └── sample_output/
     └── expected_patient_360.csv
 ```
@@ -122,44 +127,14 @@ healthcare-patient-360-sql-demo/
 
 Use PostgreSQL or an online PostgreSQL environment such as DB Fiddle.
 
-### 1. Build the sample database
+1. Run `sql/01_schema.sql`.
+2. Run `sql/02_seed_data.sql`.
+3. Run `sql/03_problem_query.sql` to inspect the raw multi-table join behavior.
+4. Run `sql/04_solution_query.sql` to produce the consolidated patient-level output.
+5. Run `sql/05_validation_queries.sql` to verify repeated patient IDs exist in the source tables.
+6. Run `sql/06_patient_360_view.sql` to create the reusable `patient_360` view.
 
-Run:
-
-- `sql/01_schema.sql`
-- `sql/02_seed_data.sql`
-
-### 2. Reproduce the problem
-
-Run:
-
-- `sql/03_problem_query.sql`
-
-This intentionally joins the raw one-to-many tables and demonstrates row multiplication.
-
-### 3. Run the solution
-
-Run:
-
-- `sql/04_solution_query.sql`
-
-The final result should contain exactly one row per patient.
-
-### 4. Validate the source data
-
-Run:
-
-- `sql/05_validation_queries.sql`
-
-These queries prove that several source tables really do contain multiple records for the same patient.
-
-### 5. Create a reusable view
-
-Run:
-
-- `sql/06_patient_360_view.sql`
-
-Then query:
+Then:
 
 ```sql
 SELECT *
@@ -167,64 +142,16 @@ FROM patient_360
 ORDER BY patient_id;
 ```
 
-## What I learned
+## Key design takeaway
 
-The important lesson is that a multi-table data problem is not solved simply by adding more joins.
+The main lesson is **grain control across multiple source systems**.
 
-Before combining datasets, I need to define the desired output grain and make sure each source is transformed to that same grain.
+Before combining datasets, define the row you want in the final output. In this project, every child source is transformed to the same patient grain first. That allows information from several databases/tables to be represented in one complete row without losing patients who have missing source data.
 
-For this project, the desired grain is:
+## Portfolio explanation
 
-> **One row per patient**
-
-Aggregating each child dataset first prevents row multiplication and creates a cleaner dataset for analytics, reporting, dashboards, or downstream pipelines.
-
-## Interview-sized explanation
-
-> The challenge was maintaining one row per patient while combining several one-to-many datasets. I first aggregated each source table to the patient level, then left joined those summaries back to the patient table. That prevented row multiplication, preserved the available information, and left NULLs where no related record existed.
+> I modeled several healthcare source datasets that each contained different information about the same patients. Because some of those sources had multiple records per patient, I first summarized each source to the patient level. I then used LEFT JOINs to combine the summaries into a single Patient 360 row, preserving NULLs where a source had no record. The result is a reusable dataset that can support reporting and dashboards.
 
 ## Disclaimer
 
 All names and healthcare records in this repository are fictional and were created solely for portfolio and learning purposes. No real patient data or proprietary company information is included.
-
-
-## Data model
-
-GitHub can render the project ERD directly from Mermaid:
-
-See [`docs/data-model.md`](docs/data-model.md).
-
-## Before vs. after
-
-See [`docs/before-after.md`](docs/before-after.md) for a simple illustration of how raw one-to-many joins multiply rows and how the final design restores one row per patient.
-
-## Dashboard layer
-
-The repository now includes a dashboard-ready Patient 360 dataset:
-
-`dashboard/patient_360_dashboard.csv`
-
-It can be loaded directly into Tableau Public to build:
-
-- KPI cards for patients, encounters, trauma, burns, claims, billed, paid, and outstanding
-- encounters by facility
-- claims by status
-- burn severity
-- trauma level
-- a patient-level detail table
-
-See [`dashboard/README.md`](dashboard/README.md) for the build guide.
-
-The complete project flow is:
-
-```text
-Raw source tables
-      ↓
-Duplicate-row problem
-      ↓
-SQL aggregation by patient
-      ↓
-Patient 360 dataset
-      ↓
-Tableau dashboard
-```

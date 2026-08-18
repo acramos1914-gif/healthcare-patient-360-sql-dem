@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<style>text{font-family:Arial,sans-serif;fill:#14213d}.title{font-size:38px;font-weight:700}.sub{font-size:19px;fill:#475569}.k{font-size:16px;font-weight:700}.v{font-size:30px;font-weight:700}.h{font-size:20px;font-weight:700}.small{font-size:14px}.card{fill:#fff;stroke:#dbe3ef;stroke-width:2}.grid{stroke:#cbd5e1;stroke-width:1}.bar{fill:#2563eb}.bar2{fill:#0f766e}.bar3{fill:#c2410c}</style>
+<rect width="1400" height="820" fill="#f8fafc"/>
+<text x="55" y="60" class="title">Healthcare Patient 360 Dashboard Preview</text>
+<text x="55" y="95" class="sub">Reporting layer built from the consolidated one-row-per-patient SQL dataset</text>
+<g>
+<rect x="55" y="135" rx="12" width="145" height="100" class="card"/><text x="75" y="165" class="k">Total Patients</text><text x="75" y="210" class="v">8</text>
+<rect x="215" y="135" rx="12" width="145" height="100" class="card"/><text x="235" y="165" class="k">Encounters</text><text x="235" y="210" class="v">9</text>
+<rect x="375" y="135" rx="12" width="145" height="100" class="card"/><text x="395" y="165" class="k">Trauma Patients</text><text x="395" y="210" class="v">3</text>
+<rect x="535" y="135" rx="12" width="145" height="100" class="card"/><text x="555" y="165" class="k">Burn Patients</text><text x="555" y="210" class="v">3</text>
+<rect x="695" y="135" rx="12" width="145" height="100" class="card"/><text x="715" y="165" class="k">Claims</text><text x="715" y="210" class="v">8</text>
+<rect x="855" y="135" rx="12" width="145" height="100" class="card"/><text x="875" y="165" class="k">Total Billed</text><text x="875" y="210" class="v">$231.1K</text>
+<rect x="1015" y="135" rx="12" width="145" height="100" class="card"/><text x="1035" y="165" class="k">Total Paid</text><text x="1035" y="210" class="v">$58.8K</text>
+<rect x="1175" y="135" rx="12" width="170" height="100" class="card"/><text x="1195" y="165" class="k">Outstanding</text><text x="1195" y="210" class="v">$172.3K</text>
+</g>
+<rect x="55" y="270" rx="12" width="400" height="250" class="card"/><text x="75" y="305" class="h">Encounters by Facility</text>
+<line x1="95" y1="475" x2="415" y2="475" class="grid"/>
+<rect x="125" y="345" width="65" height="130" class="bar"/><text x="157" y="335" text-anchor="middle" class="small">5</text><text x="157" y="500" text-anchor="middle" class="small">Metro</text>
+<rect x="225" y="420" width="65" height="55" class="bar"/><text x="257" y="410" text-anchor="middle" class="small">2</text><text x="257" y="500" text-anchor="middle" class="small">Northside</text>
+<rect x="325" y="420" width="65" height="55" class="bar"/><text x="357" y="410" text-anchor="middle" class="small">2</text><text x="357" y="500" text-anchor="middle" class="small">Regional</text>
+<rect x="475" y="270" rx="12" width="400" height="250" class="card"/><text x="495" y="305" class="h">Claims by Status</text>
+<rect x="520" y="350" width="220" height="36" class="bar2"/><text x="750" y="374" class="small">Paid 5</text>
+<rect x="520" y="405" width="90" height="36" fill="#eab308"/><text x="620" y="429" class="small">Pending 2</text>
+<rect x="520" y="460" width="45" height="36" class="bar3"/><text x="575" y="484" class="small">Denied 1</text>
+<rect x="895" y="270" rx="12" width="450" height="250" class="card"/><text x="915" y="305" class="h">Registry Coverage</text>
+<text x="925" y="355" class="small">Trauma patients</text><rect x="1040" y="335" width="180" height="28" class="bar"/><text x="1230" y="355" class="small">3</text>
+<text x="925" y="405" class="small">Burn patients</text><rect x="1040" y="385" width="180" height="28" class="bar2"/><text x="1230" y="405" class="small">3</text>
+<text x="925" y="455" class="small">Allergy records</text><rect x="1040" y="435" width="240" height="28" fill="#7c3aed"/><text x="1290" y="455" class="small">6</text>
+<rect x="55" y="545" rx="12" width="1290" height="220" class="card"/><text x="75" y="580" class="h">Patient 360 Detail — One Row Per Patient</text>
+<g class="small"><text x="75" y="620">patient_id</text><text x="165" y="620">patient_name</text><text x="330" y="620">encounters</text><text x="430" y="620">trauma</text><text x="520" y="620">burn</text><text x="610" y="620">claims</text><text x="700" y="620">total_billed</text><text x="815" y="620">total_paid</text><text x="920" y="620">outstanding</text><text x="1045" y="620">allergies</text>
+<line x1="75" y1="635" x2="1315" y2="635" class="grid"/>
+<text x="75" y="665">1001</text><text x="165" y="665">James Carter</text><text x="350" y="665">3</text><text x="450" y="665">2</text><text x="540" y="665">2</text><text x="630" y="665">3</text><text x="700" y="665">$54,700</text><text x="815" y="665">$42,200</text><text x="920" y="665">$12,500</text><text x="1045" y="665">Peanuts, Penicillin</text>
+<line x1="75" y1="680" x2="1315" y2="680" class="grid"/>
+<text x="75" y="710">1003</text><text x="165" y="710">David Brown</text><text x="350" y="710">2</text><text x="450" y="710">1</text><text x="540" y="710">NULL</text><text x="630" y="710">2</text><text x="700" y="710">$73,700</text><text x="815" y="710">$5,800</text><text x="920" y="710">$67,900</text><text x="1045" y="710">Latex</text></g>
+<text x="700" y="800" text-anchor="middle" class="sub">The dashboard is the downstream reporting layer. SQL first consolidates the source systems into a trusted patient-level dataset.</text>
+</svg>

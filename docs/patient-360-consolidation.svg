@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780">
+<style>
+text{font-family:Arial,sans-serif;fill:#14213d}.title{font-size:38px;font-weight:700}.sub{font-size:20px;fill:#425466}
+.h{font-size:20px;font-weight:700;fill:white}.label{font-size:18px;font-weight:700}.small{font-size:15px}.tiny{font-size:13px}
+.box{fill:#fff;stroke:#cbd5e1;stroke-width:2}.blue{fill:#0b5cab}.teal{fill:#0f766e}.green{fill:#15803d}.orange{fill:#c2410c}.purple{fill:#6d28d9}
+.arrow{stroke:#2563eb;stroke-width:5;fill:none;marker-end:url(#a)}.dash{stroke:#94a3b8;stroke-width:2;stroke-dasharray:6 6}
+</style>
+<defs><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#2563eb"/></marker></defs>
+<rect width="1400" height="780" fill="#f8fafc"/>
+<text x="55" y="65" class="title">Healthcare Patient 360: Consolidating Multiple Sources</text>
+<text x="55" y="100" class="sub">Different operational datasets → transformed to the same patient grain → one trusted row per patient</text>
+<g>
+<rect x="55" y="160" rx="14" width="250" height="115" class="box"/><rect x="55" y="160" rx="14" width="250" height="38" class="blue"/>
+<text x="180" y="186" text-anchor="middle" class="h">PATIENTS</text><text x="75" y="225" class="small">patient_id • demographics</text><text x="75" y="250" class="small">MRN • DOB • location</text>
+<rect x="55" y="310" rx="14" width="250" height="115" class="box"/><rect x="55" y="310" rx="14" width="250" height="38" class="teal"/>
+<text x="180" y="336" text-anchor="middle" class="h">ENCOUNTERS</text><text x="75" y="375" class="small">Multiple visits per patient</text><text x="75" y="400" class="small">facility • dates • visit type</text>
+<rect x="55" y="460" rx="14" width="250" height="115" class="box"/><rect x="55" y="460" rx="14" width="250" height="38" class="orange"/>
+<text x="180" y="486" text-anchor="middle" class="h">REGISTRIES</text><text x="75" y="525" class="small">Trauma + burn records</text><text x="75" y="550" class="small">severity • type • score</text>
+<rect x="55" y="610" rx="14" width="250" height="115" class="box"/><rect x="55" y="610" rx="14" width="250" height="38" class="purple"/>
+<text x="180" y="636" text-anchor="middle" class="h">CLAIMS / ALLERGIES</text><text x="75" y="675" class="small">Billing + clinical details</text><text x="75" y="700" class="small">status • amounts • reactions</text>
+</g>
+<rect x="430" y="245" rx="18" width="350" height="400" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+<text x="605" y="292" text-anchor="middle" class="label">TRANSFORM TO PATIENT GRAIN</text>
+<text x="470" y="345" class="small">1. Group each child source by patient_id</text>
+<text x="470" y="390" class="small">2. COUNT repeated records</text>
+<text x="470" y="435" class="small">3. MIN / MAX important dates</text>
+<text x="470" y="480" class="small">4. SUM financial measures</text>
+<text x="470" y="525" class="small">5. STRING_AGG distinct descriptors</text>
+<text x="470" y="570" class="small">6. LEFT JOIN summaries to patients</text>
+<rect x="485" y="595" rx="10" width="240" height="35" fill="#dbeafe"/>
+<text x="605" y="618" text-anchor="middle" class="small" font-weight="700">Target grain: 1 row = 1 patient</text>
+<path d="M305 217 C365 217, 375 310, 430 340" class="arrow"/>
+<path d="M305 367 C360 367, 380 390, 430 410" class="arrow"/>
+<path d="M305 517 C360 517, 380 490, 430 475" class="arrow"/>
+<path d="M305 667 C360 667, 380 590, 430 555" class="arrow"/>
+<path d="M780 445 L875 445" class="arrow"/>
+<rect x="885" y="185" rx="18" width="455" height="500" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+<text x="1112" y="235" text-anchor="middle" class="label">PATIENT 360 OUTPUT</text>
+<text x="1112" y="270" text-anchor="middle" class="sub">One consolidated row per patient</text>
+<rect x="920" y="310" width="385" height="44" fill="#15803d"/><text x="1112" y="338" text-anchor="middle" class="h">patient_id = 1001</text>
+<g class="small">
+<text x="930" y="390">Demographics</text><text x="1125" y="390">James Carter • Atlanta, GA</text>
+<line x1="930" y1="405" x2="1295" y2="405" class="dash"/>
+<text x="930" y="440">Encounters</text><text x="1125" y="440">3 visits • 2 facilities</text>
+<line x1="930" y1="455" x2="1295" y2="455" class="dash"/>
+<text x="930" y="490">Trauma</text><text x="1125" y="490">2 records • Level II</text>
+<line x1="930" y1="505" x2="1295" y2="505" class="dash"/>
+<text x="930" y="540">Burn</text><text x="1125" y="540">2 records • Thermal • Moderate</text>
+<line x1="930" y1="555" x2="1295" y2="555" class="dash"/>
+<text x="930" y="590">Claims</text><text x="1125" y="590">3 claims • Paid / Pending</text>
+<line x1="930" y1="605" x2="1295" y2="605" class="dash"/>
+<text x="930" y="640">Allergies</text><text x="1125" y="640">Peanuts • Penicillin</text>
+</g>
+<text x="700" y="755" text-anchor="middle" class="small" fill="#475569">Missing source records remain NULL instead of removing the patient or forcing invented values.</text>
+</svg>
