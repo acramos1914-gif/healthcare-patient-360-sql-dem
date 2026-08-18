@@ -1,0 +1,9 @@
+patient_id,medical_record_number,patient_name,city,state,encounter_count,first_admit_date,latest_admit_date,facilities,encounter_types,trauma_record_count,max_injury_severity_score,injury_types,trauma_levels,burn_record_count,max_burn_percentage,burn_types,burn_severities,claim_count,total_billed,total_paid,total_outstanding,claim_statuses,allergy_count,allergies
+1001,MRN-0001,James Carter,Atlanta,GA,3,2026-07-10,2026-08-01,"Metro General, Regional Medical","Emergency, Follow-up, Specialist",2,18,Motor Vehicle Accident,Level II,2,15.0,Thermal,Moderate,3,54700.0,42200.0,12500.0,"Paid, Pending",2,"Peanuts, Penicillin"
+1002,MRN-0002,Maria Lopez,Decatur,GA,1,2026-07-11,2026-07-11,Northside Medical,Emergency,,,,,,,,,1,8500.0,7900.0,600.0,Paid,,
+1003,MRN-0003,David Brown,Marietta,GA,2,2026-07-12,2026-07-20,Metro General,"Emergency, Follow-up",1,22,Fall,Level I,,,,,2,73700.0,5800.0,67900.0,"Paid, Pending",1,Latex
+1004,MRN-0004,Angela Wilson,Atlanta,GA,1,2026-07-18,2026-07-18,Northside Medical,Outpatient,,,,,,,,,1,3200.0,2900.0,300.0,Paid,,
+1005,MRN-0005,Robert Davis,Smyrna,GA,1,2026-07-22,2026-07-22,Regional Medical,Emergency,2,25,Industrial Accident,Level I,2,35.0,Chemical,Severe,1,91000.0,0.0,91000.0,Denied,2,"Aspirin, Shellfish"
+1006,MRN-0006,Susan Taylor,Duluth,GA,1,2026-07-25,2026-07-25,Metro General,Emergency,,,,,1,8.0,Electrical,Minor,,,,,,,
+1007,MRN-0007,Michael Green,Roswell,GA,,,,,,,,,,,,,,,,,,,,
+1008,MRN-0008,Denise Hall,Atlanta,GA,,,,,,,,,,,,,,,,,,,1,Sulfa
